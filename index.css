@@ -1,0 +1,48 @@
+
+html {
+    height: 100%;
+    margin: 0px;
+    
+}
+
+body {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    height: 100%;
+    margin: 0px;
+}
+
+#main {
+    flex: 9;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+#side {
+    flex: 1;
+    height: 100%;
+}
+
+#double {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+#treemap {
+    flex: 1;
+}
+
+#bar {
+    flex: 1;
+}
+
+#barline {
+    flex: 1;
+}
+
+div {
+    border: 1px solid black;
+}
