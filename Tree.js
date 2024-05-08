@@ -46,7 +46,7 @@ class Tree {
 
 
 
-        const color = d3.scaleLinear().domain([0, max]).range(["white", "blue"])
+        const color = d3.scaleLinear().domain([0, max]).range(["white", "#d6dfff"])
 
         const root = d3.hierarchy(data).sum(d => d[0] ? d[0].NA_Sales : 0/*{ console.log(d[0].NA_Sales); return 1; }*/);
 
@@ -66,8 +66,8 @@ class Tree {
                 .attr("y", d => d.y0)
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0)
-                .style("stroke", "black")
-                .style("opacity", 0.5)
+                .style("stroke-width", 0)
+                .style("opacity", 0.75)
                 .style("fill", d => color(d.data[0].NA_Sales));
 
 
@@ -156,6 +156,3 @@ class Tree {
             
     }
 }
-
-
-const tree = new Tree();
