@@ -1,11 +1,23 @@
 class Bar {
     constructor() {
+        this.render({"regions":["North America", "Europe", "Japan", "Other"]});
+    }
+
+    render({regions}) {
+        var keys = []
+        var regionalSales = {"North America":"NA_Sales", "Europe":"EU_Sales", "Japan":"JP_Sales", "Other":"Other_Sales"}
+        if (regions) {
+            for (let region of regions) {
+                keys.push(regionalSales[region]);
+            }
+        }
         // Set the dimensions and margins of the graph
         var margin = { top: 20, right: 20, bottom: 50, left: 120 };
         var width = 600 - margin.left - margin.right;
         var height = 400 - margin.top - margin.bottom;
 
         // Append the svg page body
+        d3.select("#bar").selectAll("*").remove();
         var svg = d3.select("#bar")
         .append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -36,7 +48,7 @@ class Bar {
 
         // Stack the data
         var stack = d3.stack()
-            .keys(["NA_Sales", "EU_Sales", "JP_Sales", "Other_Sales"])
+            .keys(keys)
             .order(d3.stackOrderNone)
             .offset(d3.stackOffsetNone);
         var stackedData = stack(salesByRegion);
@@ -72,6 +84,7 @@ class Bar {
             .attr("class", "tooltip")
             .style("opacity", 0);
 
+            console.log(stackedData);
             // Bars
             svg.selectAll(".bar")
             .data(stackedData)
@@ -88,21 +101,27 @@ class Bar {
             .attr("x", d => x(d[0]))
             .attr("width", d => x(d[1]) - x(d[0]))
             // Tooltip interaction
-            .on("mouseover", function(event, d) {
-                var sales = d[1] - d[0];
-                var region = d3.select(this.parentNode).datum().key.split("_")[0]; // Get region from key
-                tooltip.transition()
-                .duration(200)
-                .style("opacity", .9);
-                tooltip.html(`<strong>Sales:</strong> ${sales.toFixed(2)}<br><strong>Region:</strong> ${region}`) // display the number of sales
-                .style("left", (event.pageX) + "px")
-                .style("top", (event.pageY - 28) + "px");
-            })
-            .on("mouseout", function(d) {
-                tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-            });
+            .on("mouseover", function(e, d) {
+                ToolTip.addText(e, [`Platform: ${d.data.platform}`, `Region: ${d3.select(this.parentNode).datum().key.split("_")[0]}`, `Sales: $${(d[1]-d[0]).toFixed(3)} million`]);
+              })
+              .on("mouseout", () => {
+                  ToolTip.hide();
+              });
+            // .on("mouseover", function(event, d) {
+            //     var sales = d[1] - d[0];
+            //     var region = d3.select(this.parentNode).datum().key.split("_")[0]; // Get region from key
+            //     tooltip.transition()
+            //     .duration(200)
+            //     .style("opacity", .9);
+            //     tooltip.html(`<strong>Sales:</strong> ${sales.toFixed(2)}<br><strong>Region:</strong> ${region}`) // display the number of sales
+            //     .style("left", (event.pageX) + "px")
+            //     .style("top", (event.pageY - 28) + "px");
+            // })
+            // .on("mouseout", function(d) {
+            //     tooltip.transition()
+            //     .duration(500)
+            //     .style("opacity", 0);
+            // });
 
             //chart title
             svg.append("text")

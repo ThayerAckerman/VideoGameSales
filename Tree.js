@@ -10,13 +10,17 @@ class Tree {
         
 
         d3.csv("Video_Games.csv").then(data => {
-            this.render(data);
+            this.data = data;
+            this.render({});
         })     
 
     }
 
-    render(data) {
+    render({genre, publisher}) {
 
+        let data = this.data;
+
+        d3.select("#treemap").selectAll("*").remove();
         const svg = d3.select("#treemap")
             .append("svg")
             .attr("width", this.width)
@@ -24,6 +28,14 @@ class Tree {
             .attr("transform", "translate(15, 0)")
 
         data = data.filter(d => d.Name != "");
+        if (genre && (genre != "All")) {
+            console.log(genre);
+            data = data.filter(d => d.Genre == genre);
+        }
+        if (publisher && (publisher != "All")) {
+            data = data.filter(d => d.Publisher == publisher);
+        }
+        
         const max = d3.max(data, d => d.NA_Sales);
 
         const objData = Object.groupBy(data, ({ Genre }) => Genre);
@@ -46,7 +58,7 @@ class Tree {
 
 
 
-        const color = d3.scaleLinear().domain([0, max]).range(["white", "#d6dfff"])
+        const color = d3.scaleLinear().domain([0, max]).range(["white", "#e3e9ff"])
 
         const root = d3.hierarchy(data).sum(d => d[0] ? d[0].NA_Sales : 0/*{ console.log(d[0].NA_Sales); return 1; }*/);
 
@@ -66,9 +78,15 @@ class Tree {
                 .attr("y", d => d.y0)
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0)
-                .style("stroke-width", 0)
+                .style("stroke-width", "0")
                 .style("opacity", 0.75)
-                .style("fill", d => color(d.data[0].NA_Sales));
+                .style("fill", d => color(d.data[0].NA_Sales))
+                .on("mousemove", function(e, d) {
+                    ToolTip.addText(e, [`Genre: ${d.data[0].Genre}`, `Publisher: ${d.data[0].Publisher}`, `NA Sales: ${d.data[0].NA_Sales}`]);
+                })
+                .on("mouseout", () => {
+                    ToolTip.hide();
+                })
 
 
 
