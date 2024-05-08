@@ -95,7 +95,7 @@ class Tree {
 
                     const use = height < cwidth ? height : cwidth;
 
-
+                    
                     return `${use/4}px`;
                     
                 })
@@ -152,7 +152,7 @@ class Tree {
                 .attr("y", function(d){ return d.y0+21})
                 .text(function(d){ return d.data.genre })
                 .attr("font-size", "19px")
-                .attr("fill",  "black" )
+                .attr("fill",  "lightgray" )
             
     }
 }
