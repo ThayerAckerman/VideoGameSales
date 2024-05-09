@@ -133,6 +133,7 @@ class Tree {
         function wrap(text, width) {
 
             width = root.leaves().length == 1 ? 30 : width;
+            width = width > 60 ? 60 : width;
             
             text.each(function () {
                 var text = d3.select(this),
