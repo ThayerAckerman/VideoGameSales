@@ -132,14 +132,14 @@ class Bar {
                 .attr("y", -margin.top / 2)
                 .attr("text-anchor", "middle")
                 .attr("fill", "lightgray")
-                .text("Total Global Sales by Platform and Region");
+                .text("Sales by Platform and Region");
 
                 //x-axis label
             svg.append("text")
             .attr("transform", `translate(${width / 2}, ${height + margin.bottom / 2 + 10})`) 
             .attr("text-anchor", "middle")
             .attr("fill", "lightgray")
-            .text("Global Sales");
+            .text("Sales");
 
             //color legend
             var legend = svg.append("g")
