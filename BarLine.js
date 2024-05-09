@@ -4,8 +4,8 @@ class BarLine {
   }  
   render({regions}) {
     // set the dimensions and margins of the graph
-    var margin = {top: 15, right: 100, bottom: 50, left: 50},
-        width = 600 - margin.left - margin.right,
+    var margin = {top: 15, right: 175, bottom: 50, left: 30},
+        width = 680 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
     // append the svg object to the body of the page
@@ -17,6 +17,47 @@ class BarLine {
       .append("g")
         .attr("transform",
               "translate(" + margin.left*2 + "," + margin.top + ")");
+
+    // Define the colors for the user and critic scores
+    const userScoreColor = "#7289da";
+    const criticScoreColor = "#b772da";
+
+    // Add SVG elements for the legend
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", "translate(" + (width + 40) + "," + margin.top + ")");
+
+    // Add rectangles for user score legend
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("y", 10)
+        .attr("width", 20)
+        .attr("height", 10)
+        .attr("fill", userScoreColor);
+
+    // Add text for user score legend
+    legend.append("text")
+        .attr("x", 25)
+        .attr("y", 20)
+        .text("User \nScore")
+        .attr("fill", "white");
+
+    // Add rectangles for critic score legend
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("y", 30)
+        .attr("width", 20)
+        .attr("height", 10)
+        .attr("fill", criticScoreColor);
+
+    // Add text for critic score legend
+    legend.append("text")
+        .attr("x", 25)
+        .attr("y", 40)
+        .text("Critic Score")
+        .attr("fill", "white");
+
+    
 
     //Read the data
     d3.csv("Video_Games.csv").then(data => {
@@ -140,12 +181,15 @@ class BarLine {
         .attr("y", d => y2(d.userScore))
         .attr("width", barWidth / 2) // Set the width of user bars
         .attr("height", d => height - y2(d.userScore))
-        .attr("fill", "#9084b5")
+        .attr("fill", "#7289da")
+        .style("opacity", 0.6)
         .on("mouseover", function(e, d) {
-          ToolTip.addText(e, [`User Score: ${d.userScore.toFixed(0)}%`, `Critic Score: ${d.criticScore.toFixed(0)}%`]);
+          ToolTip.addText(e, [`*User Score: ${d.userScore.toFixed(0)}%*`, `Critic Score: ${d.criticScore.toFixed(0)}%`]);
+          d3.select(this).style("opacity", 1);
         })
-        .on("mouseout", () => {
+        .on("mouseout", function(){
             ToolTip.hide();
+            d3.select(this).style("opacity", 0.6);
         });
 
         barGroups.append("rect")
@@ -154,12 +198,16 @@ class BarLine {
         .attr("y", d => y2(d.userScore + d.criticScore))
         .attr("width", barWidth / 2) // Set the width of critic bars
         .attr("height", d => height - y2(d.criticScore))
-        .attr("fill", "#84a7b5")
+        .attr("fill", "#b772da")
+        .style("opacity", 0.6)
+        .attr("opacity", 0.5)
         .on("mouseover", function(e, d) {
-          ToolTip.addText(e, [`User Score: ${d.userScore.toFixed(0)}%`, `Critic Score: ${d.criticScore.toFixed(0)}%`]);
+          ToolTip.addText(e, [`User Score: ${d.userScore.toFixed(0)}%`, `*Critic Score: ${d.criticScore.toFixed(0)}%*`]);
+          d3.select(this).style("opacity", 1);
         })
-        .on("mouseout", () => {
+        .on("mouseout", function(){
             ToolTip.hide();
+            d3.select(this).style("opacity", 0.6);
         });
 
         // Add the line
@@ -181,15 +229,25 @@ class BarLine {
             .x(function(d) { return x(d[0]); }) // Accessing the year from the key
             .y(function(d) { return y(d[1]); }) // Accessing the sales from the value
           )
-          .on("mousemove", function(e, d) {
+          .on("mouseover", function(e, d) {
             var xCord = d3.pointer(e)[0];
             var ratio = (xCord) / width
             var curYear = 1980 + Math.round(ratio * 40);
             var curSales = gameSalesArray.find(d => d[0] == curYear)[1]
             ToolTip.addText(e, [`Year: ${curYear}`, `Sales: $${curSales.toFixed(3)} million`]);
+            // Remove existing circles
+            svg.selectAll("circle").remove();
+
+            // Append a circle at the current point
+            svg.append("circle")
+                .attr("cx", x(curYear))
+                .attr("cy", y(curSales))
+                .attr("r", 8)
+                .attr("fill", "white"); // Change the color of the circle as needed
           })
           .on("mouseout", () => {
               ToolTip.hide();
+              svg.selectAll("circle").remove();
           })
         
     })

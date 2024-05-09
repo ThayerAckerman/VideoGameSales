@@ -80,9 +80,9 @@ class Bar {
             .range(['#ed5555', '#b4c468', '#b8a7ea', '#b7e0dc']);
 
         // Create a tooltip
-            var tooltip = d3.select("#bar").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+            // var tooltip = d3.select("#bar").append("div")
+            // .attr("class", "tooltip")
+            // .style("opacity", 0);
 
             console.log(stackedData);
             // Bars
@@ -95,6 +95,7 @@ class Bar {
             .data(d => d)
             .enter()
             .append("rect")
+            .attr("opacity", 0.8)
             .attr("class", "bar")
             .attr("y", d => y(d.data.platform))
             .attr("height", y.bandwidth())
@@ -103,10 +104,12 @@ class Bar {
             // Tooltip interaction
             .on("mouseover", function(e, d) {
                 ToolTip.addText(e, [`Platform: ${d.data.platform}`, `Region: ${d3.select(this.parentNode).datum().key.split("_")[0]}`, `Sales: $${(d[1]-d[0]).toFixed(3)} million`]);
-              })
-              .on("mouseout", () => {
+                d3.select(this).style("opacity", 1);
+            })
+            .on("mouseout", function(){
                   ToolTip.hide();
-              });
+                  d3.select(this).style("opacity", 0.8);
+            });
             // .on("mouseover", function(event, d) {
             //     var sales = d[1] - d[0];
             //     var region = d3.select(this.parentNode).datum().key.split("_")[0]; // Get region from key

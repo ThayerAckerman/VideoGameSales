@@ -36,7 +36,7 @@ class Tree {
             data = data.filter(d => d.Publisher == publisher);
         }
         
-        const max = d3.max(data, d => d.NA_Sales);
+        const max = d3.max(data, d => parseFloat(d.NA_Sales));
 
         const objData = Object.groupBy(data, ({ Genre }) => Genre);
         Object.keys(objData).map(genre => objData[genre] = Object.groupBy(objData[genre], ({ Publisher }) => Publisher));
@@ -58,7 +58,7 @@ class Tree {
 
 
 
-        const color = d3.scaleLinear().domain([0, max]).range(["white", "#e3e9ff"])
+        const color = d3.scaleLinear().domain([0, max]).range(["lightgray", "#7289da"])
 
         const root = d3.hierarchy(data).sum(d => d[0] ? d[0].NA_Sales : 0/*{ console.log(d[0].NA_Sales); return 1; }*/);
 
@@ -78,14 +78,16 @@ class Tree {
                 .attr("y", d => d.y0)
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0)
+                .attr("opacity", 0.8)
                 .style("stroke-width", "0")
-                .style("opacity", 0.75)
                 .style("fill", d => color(d.data[0].NA_Sales))
                 .on("mousemove", function(e, d) {
                     ToolTip.addText(e, [`Genre: ${d.data[0].Genre}`, `Publisher: ${d.data[0].Publisher}`, `NA Sales: ${d.data[0].NA_Sales}`]);
+                    d3.select(this).style("opacity", 1);
                 })
-                .on("mouseout", () => {
+                .on("mouseout", function(){
                     ToolTip.hide();
+                    d3.select(this).style("opacity", 0.8);
                 })
 
 
@@ -111,10 +113,11 @@ class Tree {
                     d3.select(this).attr("width", cwidth);
                     console.log(d3.select(this).attr("width"))
 
-                    const use = height < cwidth ? height : cwidth;
-
-                    
-                    return `${use/4}px`;
+                    let use = height < cwidth ? height : cwidth;
+                    use /= 4;
+                    use = use > 50 ? 50 : use;
+                                        
+                    return `${use}px`;
                     
                 })
                 .attr("fill", function(d) {
@@ -128,6 +131,8 @@ class Tree {
             
                 
         function wrap(text, width) {
+
+            width = root.leaves().length == 1 ? 30 : width;
             
             text.each(function () {
                 var text = d3.select(this),
