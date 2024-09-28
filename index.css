@@ -11,6 +11,7 @@ body {
     flex: 1;
     height: 100%;
     margin: 0px;
+    background-color:  	#424549;
 }
 
 #main {
@@ -45,4 +46,5 @@ body {
 
 div {
     border: 1px solid black;
+    border-collapse: collapse;
 }
