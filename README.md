@@ -107,23 +107,25 @@ Make sure to close the Python server when you are done using the app. One way to
 The visualization app is seperated into 4 distinct panes – the line plot, stacked bar chart, treemap diagram, and  filter options pane – as shown below:
 ![App Layout](app_layout.png)
 
+In addition to each of the four panes, all visualizations also support basic hover interactions, enabling the user to learn more about each data point by simpling hovering over them.
+
 **1. Line / Bar Plot**
 
-    This pane, located in the top, left corner, displays game sales over time with the user and critic ratings, per year, overlayed. In addition to providing a simple view of sales over time, it also allows the user to easily monitor the relationships between game sales and ratings.
+This pane, located in the top, left corner, displays game sales over time with the user and critic ratings, per year, overlayed. In addition to providing a simple view of sales over time, it also allows the user to easily monitor the relationships between game sales and ratings.
 
 **2. Stacked Bar Plot**
 
-    The second pane, located in the bottom, left corner, shows a stacked bar chart of game sales by platform, with the regions stacked. This makes it easy to compare sales between platforms, taking into account each region. 
+The second pane, located in the bottom, left corner, shows a stacked bar chart of game sales by platform, with the regions stacked. This makes it easy to compare sales between platforms, taking into account each region. 
 
 **3. Tree Map**
 
-    Next is the tree map pane, in the right, center of the window. The final visualization is the tree map. This tree map shows the sales of each publisher within specific genres through the sizes of nested rectangles. By visualizing sales through the area of rectangles, the user is provided with a better intuition for analysis.
+Next is the tree map pane, in the right, center of the window. The final visualization is the tree map. This tree map shows the sales of each publisher within specific genres through the sizes of nested rectangles. By visualizing sales through the area of rectangles, the user is provided with a better intuition for analysis.
 
 **4. Filter Options**
 
-    Finally, the filter options pane is on the far right of the window. This pane contains the title, contributors, and filters for the region and tree. The region filter is color-coded across the visualization and allows for any combination of regions to be compared. The tree options section of this pane allows the tree map to be filtered by genre and publisher.
+Finally, the filter options pane is on the far right of the window. This pane contains the title, contributors, and filters for the region and tree. The region filter is color-coded across the visualization and allows for any combination of regions to be compared. The tree options section of this pane allows the tree map to be filtered by genre and publisher.
 
-In addition to each of the four panes, all visualizations also support basic hover interactions, enabling the user to learn more about each data point by simpling hovering over them.
+
 
 
 <br>
